@@ -119,7 +119,7 @@
         android:layout_marginStart="@dimen/extra_large_padding"
         android:layout_marginEnd="@dimen/extra_large_padding"
         android:layout_marginTop="8sp"
-        android:text="Use Location"
+        android:text="Use Device Location"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/txt_requires_permission"
         app:layout_constraintStart_toStartOf="parent"
