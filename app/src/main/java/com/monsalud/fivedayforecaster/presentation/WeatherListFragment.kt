@@ -3,7 +3,9 @@ package com.monsalud.fivedayforecaster.presentation
 import android.content.Context
 import android.location.Location
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -42,10 +44,34 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
 
     private lateinit var networkUnavailableDialog: AlertDialog.Builder
 
+    private var savedZipCode: String? = null
+    private var savedLocationDisplay: String? = null
+    private var savedWeatherResult: FiveDayWeatherResult? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.title = getString(R.string.five_day_forecast)
         viewModel.initialize()
+
+        savedInstanceState?.let { bundle ->
+            savedZipCode = bundle.getString("saved_zip_code")
+            savedLocationDisplay = bundle.getString("saved_location_display")
+            savedWeatherResult = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable("saved_weather_result", FiveDayWeatherResult::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getParcelable("saved_weather_result")
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("saved_zip_code", savedZipCode)
+        outState.putString("saved_location_display", binding.locationDisplay.text.toString())
+        savedWeatherResult?.let { result ->
+            outState.putParcelable("saved_weather_result", result)
+        }
     }
 
     override fun onCreateView(
@@ -54,6 +80,7 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         Log.d("WeatherListFragment", "onCreateView called")
+
         val connectivityManager =
             activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -86,8 +113,43 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
             findNavController().popBackStack()
         }
 
-        val args: WeatherListFragmentArgs by navArgs()
-        val zipCode = args.zipCode
+        setupObservers()
+
+        if (!networkUtils.hasInternetConnection(connectivityManager)) {
+            networkUnavailableDialog.show()
+        }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = binding.rvWeatherList
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        weatherListAdapter.setOnItemClickListener(this)
+        Log.d("WeatherListFragment", "OnItemClickListener set on adapter")
+        binding.rvWeatherList.adapter = weatherListAdapter
+
+        savedLocationDisplay?.let {
+            binding.locationDisplay.text = it
+        }
+
+        savedWeatherResult?.let {
+            updateWeatherDisplay(it)
+        } ?: run {
+            savedZipCode?.let { zipCode ->
+                fetchWeatherForecast(zipCode)
+            } ?: run {
+                val args: WeatherListFragmentArgs by navArgs()
+                fetchWeatherForecast(args.zipCode)
+            }
+        }
+    }
+
+    private fun fetchWeatherForecast(zipCode: String) {
+        val connectivityManager =
+            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -99,16 +161,32 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
 
                 viewModel.weatherForecast.collect { fiveDayWeatherResult ->
                     Log.d("WeatherListFragment", "Received weather forecast, updating UI")
-                    binding.locationDisplay.setTextColor(resources.getColor(R.color.weather_dark))
-                    weatherListAdapter.updateData(fiveDayWeatherResult)
-                    binding.progressBar.isVisible = false
-                    binding.rvWeatherList.isVisible = true
+                    updateWeatherDisplay(fiveDayWeatherResult)
                 }
             }
         }
+    }
 
-        if (!networkUtils.hasInternetConnection(connectivityManager)) {
-            networkUnavailableDialog.show()
+
+
+    private fun updateWeatherDisplay(fiveDayWeatherResult: FiveDayWeatherResult) {
+        binding.locationDisplay.setTextColor(resources.getColor(R.color.weather_dark))
+        weatherListAdapter.updateData(fiveDayWeatherResult)
+        binding.progressBar.isVisible = false
+        binding.rvWeatherList.isVisible = true
+        savedWeatherResult = fiveDayWeatherResult
+    }
+
+    private fun setupObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("WeatherListFragment", "Starting to collect locationState")
+                viewModel.locationState.collect { state ->
+                    Log.d("WeatherListFragment", "Collected location state: $state")
+                    updateLocationDisplay(state)
+                }
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -131,19 +209,8 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
                 }
             }
         }
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val recyclerView = binding.rvWeatherList
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-
-        weatherListAdapter.setOnItemClickListener(this)
-        Log.d("WeatherListFragment", "OnItemClickListener set on adapter")
-        binding.rvWeatherList.adapter = weatherListAdapter
-    }
 
     override fun onItemClick(weatherEntity: WeatherEntity) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -166,7 +233,10 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         Log.d("WeatherListFragment", "Updating location display to: $displayText")
         binding.locationDisplay.post {
             binding.locationDisplay.text = displayText
-            Log.d("WeatherListFragment", "Location display text set to: ${binding.locationDisplay.text}")
+            Log.d(
+                "WeatherListFragment",
+                "Location display text set to: ${binding.locationDisplay.text}"
+            )
         }
     }
 }

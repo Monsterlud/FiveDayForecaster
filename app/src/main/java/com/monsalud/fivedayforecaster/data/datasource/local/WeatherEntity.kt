@@ -30,9 +30,10 @@ data class WeatherEntity(
     var icon: String = ""
 ) : Parcelable
 
+@Parcelize
 data class FiveDayWeatherResult(
     var list: List<WeatherEntity>
-)
+) : Parcelable
 
 @Entity(tableName = "location_table")
 data class LocationEntity(
