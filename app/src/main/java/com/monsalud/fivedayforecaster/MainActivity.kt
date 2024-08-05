@@ -3,15 +3,14 @@ package com.monsalud.fivedayforecaster
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
-import com.monsalud.fivedayforecaster.presentation.NavigationCommand
-import com.monsalud.fivedayforecaster.presentation.WeatherConstants.REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE
+import com.monsalud.fivedayforecaster.presentation.utils.NavigationCommand
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE
 import com.monsalud.fivedayforecaster.presentation.WeatherViewModel
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject

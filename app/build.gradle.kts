@@ -73,6 +73,7 @@ dependencies {
     // Google
     implementation(libs.material)
     implementation(libs.google.gson)
+    implementation(libs.google.play.services.location)
 
     // UI
     implementation(libs.androidx.constraintlayout)

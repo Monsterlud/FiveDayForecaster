@@ -1,4 +1,4 @@
-package com.monsalud.fivedayforecaster.presentation
+package com.monsalud.fivedayforecaster.presentation.utils
 
 import androidx.navigation.NavDirections
 

@@ -2,6 +2,7 @@ package com.monsalud.fivedayforecaster.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.monsalud.fivedayforecaster.databinding.FragmentWeatherLocationBinding
+import com.monsalud.fivedayforecaster.presentation.utils.LocationUtils
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.ZIP_REGEX
+import com.monsalud.fivedayforecaster.presentation.utils.NavigationCommand
+import com.monsalud.fivedayforecaster.presentation.utils.PermissionsHandler
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.regex.Pattern
 
@@ -26,7 +32,8 @@ class WeatherLocationFragment : Fragment() {
     private lateinit var binding: FragmentWeatherLocationBinding
 
     private val viewModel by viewModel<WeatherViewModel>()
-    private val permissionsHandler = PermissionsHandler()
+    private val locationUtils: LocationUtils by inject<LocationUtils>()
+    private val permissionsHandler: PermissionsHandler by inject<PermissionsHandler>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +52,7 @@ class WeatherLocationFragment : Fragment() {
         )
 
         binding.zipCodeSubmitButton.setOnClickListener {
-            val zipValidator = Pattern.compile(UiConstants.ZIP_REGEX)
+            val zipValidator = Pattern.compile(ZIP_REGEX)
             val zipCode = binding.etZipCode.text.toString()
             val matcher = zipValidator.matcher(zipCode)
 
@@ -70,12 +77,19 @@ class WeatherLocationFragment : Fragment() {
         }
 
         binding.btnUseLocation.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.showToast("Use Location Button Clicked")
-            }
             if (permissionsHandler.isForegroundLocationPermissionGranted(requireActivity())) {
                 // permissions are already granted...get zip code from device location
-                // then navigate to weather list fragment and pass this zip code as an argument
+                lifecycleScope.launch {
+                    val result = locationUtils.getZipCodeFromDeviceLocation()
+                    if (result.isSuccess) {
+                        // then navigate to weather list fragment and pass this zip code as an argument
+                        val zipCode = result.getOrNull().toString()
+                        viewModel.navigateFromWeatherLocationFragmentToWeatherListFragment(zipCode)
+                    } else {
+                        Log.e("WeatherLocationFragment", "Error getting location: ${result.exceptionOrNull()}")
+                        viewModel.showToast("Error getting location")
+                    }
+                }
             }
             permissionsHandler.requestForegroundLocationPermission(requireActivity())
         }

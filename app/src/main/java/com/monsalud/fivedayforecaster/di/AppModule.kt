@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.google.gson.Gson
-import com.monsalud.fivedayforecaster.AppConstants
 import com.monsalud.fivedayforecaster.data.LocalDataSource
 import com.monsalud.fivedayforecaster.data.RemoteDataSource
 import com.monsalud.fivedayforecaster.data.WeatherListRepositoryImpl
@@ -16,6 +15,9 @@ import com.monsalud.fivedayforecaster.data.utils.NetworkUtils
 import com.monsalud.fivedayforecaster.data.utils.WeatherMappers
 import com.monsalud.fivedayforecaster.domain.WeatherRepository
 import com.monsalud.fivedayforecaster.presentation.WeatherViewModel
+import com.monsalud.fivedayforecaster.presentation.utils.LocationUtils
+import com.monsalud.fivedayforecaster.presentation.utils.PermissionsHandler
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.TIMEOUT
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.json.JsonFeature
@@ -54,6 +56,8 @@ val appModule = module {
 
     single { provideDatabase(androidApplication()) } bind WeatherDatabase::class
     single { provideDao(get()) }
+    single { LocationUtils(get()) }
+    single { PermissionsHandler() }
 }
 
 
@@ -76,8 +80,8 @@ class AppModule {
             }
         }
         engine {
-            connectTimeout = AppConstants.TIMEOUT
-            socketTimeout = AppConstants.TIMEOUT
+            connectTimeout = TIMEOUT
+            socketTimeout = TIMEOUT
         }
     }
 

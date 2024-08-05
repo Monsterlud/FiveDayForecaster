@@ -26,6 +26,7 @@ picasso = "2.5.2"
 glide = "4.16.0"
 library = "3.2.0-alpha11"
 ksp = "1.9.23-1.0.20"
+googlePlayLocation = "21.3.0"
 
 [libraries]
 
@@ -41,6 +42,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 # Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "googleGson" }
+google-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "googlePlayLocation" }
 
 # UI
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -90,7 +92,6 @@ androidx-library = { group = "androidx.databinding", name = "library", version.r
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-#kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeArgs" }

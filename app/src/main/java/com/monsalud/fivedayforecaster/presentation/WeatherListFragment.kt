@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -20,6 +21,7 @@ import com.monsalud.fivedayforecaster.R
 import com.monsalud.fivedayforecaster.data.datasource.local.FiveDayWeatherResult
 import com.monsalud.fivedayforecaster.data.datasource.local.WeatherEntity
 import com.monsalud.fivedayforecaster.databinding.FragmentListWeatherBinding
+import com.monsalud.fivedayforecaster.presentation.utils.NavigationCommand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +33,8 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
 
     private val viewModel by viewModel<WeatherViewModel>()
     private val weatherListAdapter = WeatherListAdapter(FiveDayWeatherResult(emptyList()))
+
+    private lateinit var networkUnavailableDialog: AlertDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,14 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
     ): View {
         val connectivityManager =
             activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        networkUnavailableDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Network Error")
+            .setMessage("There was an error getting network connectivity")
+            .setIcon(R.drawable.error)
+            .setPositiveButton("Ok") { dialog, _ ->
+                dialog.dismiss()
+            }
 
         // Inflate the layout for this fragment
         binding = FragmentListWeatherBinding.inflate(
@@ -113,19 +125,15 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         val recyclerView = binding.rvWeatherList
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-
-
         weatherListAdapter.setOnItemClickListener(this)
         Log.d("WeatherListFragment", "OnItemClickListener set on adapter")
         binding.rvWeatherList.adapter = weatherListAdapter
     }
 
     override fun onItemClick(weatherEntity: WeatherEntity) {
-        val action =
-            WeatherListFragmentDirections.actionWeatherListFragmentToWeatherDetailFragment(
-                weatherEntity
-            )
-        findNavController().navigate(action)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.navigateFromWeatherListFragmentToWeatherDetailFragment(weatherEntity)
+        }
     }
 
     private fun clearRecyclerView() {

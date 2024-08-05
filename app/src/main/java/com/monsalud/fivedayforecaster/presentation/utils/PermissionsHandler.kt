@@ -1,4 +1,4 @@
-package com.monsalud.fivedayforecaster.presentation
+package com.monsalud.fivedayforecaster.presentation.utils
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -6,7 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
-import com.monsalud.fivedayforecaster.presentation.WeatherConstants.REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE
 
 class PermissionsHandler {
 

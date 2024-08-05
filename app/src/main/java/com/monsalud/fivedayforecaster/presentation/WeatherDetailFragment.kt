@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.monsalud.fivedayforecaster.R
 import com.monsalud.fivedayforecaster.databinding.FragmentWeatherDetailBinding
-import com.monsalud.fivedayforecaster.presentation.UiConstants.ICON_BASE_URL
-import com.monsalud.fivedayforecaster.presentation.UiConstants.ICON_EXTENSION
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.ICON_BASE_URL
+import com.monsalud.fivedayforecaster.presentation.utils.WeatherConstants.ICON_EXTENSION
 import com.squareup.picasso.Picasso
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

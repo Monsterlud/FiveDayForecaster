@@ -3,11 +3,11 @@ package com.monsalud.fivedayforecaster.presentation
 import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.monsalud.fivedayforecaster.data.datasource.local.FiveDayWeatherResult
 import com.monsalud.fivedayforecaster.data.datasource.local.WeatherEntity
 import com.monsalud.fivedayforecaster.data.utils.NetworkUtils
 import com.monsalud.fivedayforecaster.domain.WeatherRepository
+import com.monsalud.fivedayforecaster.presentation.utils.NavigationCommand
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
