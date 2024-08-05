@@ -44,10 +44,29 @@ val appModule = module {
         return database.weatherDao()
     }
 
-    single { LocalDataSourceImpl(get(), get(), get()) } bind LocalDataSource::class
-    single { RemoteDataSourceImpl(get()) } bind RemoteDataSource::class
-    single { WeatherListRepositoryImpl(get(), get(), get()) } bind (WeatherRepository::class)
-    viewModel { WeatherViewModel(get(), get()) }
+    single {
+        LocalDataSourceImpl(
+            weatherDAO = get(),
+            gson = get(),
+            mapper = get()
+        )
+    } bind LocalDataSource::class
+
+    single { RemoteDataSourceImpl(client = get()) } bind RemoteDataSource::class
+    single {
+        WeatherListRepositoryImpl(
+            localDataSource = get(),
+            remoteDataSource = get(),
+            gson = get()
+        )
+    } bind (WeatherRepository::class)
+
+    viewModel {
+        WeatherViewModel(
+            weatherListRepository = get(),
+            networkUtils = get()
+        )
+    }
 
     single(qualifier = null) { moduleInstance.ktorClient() }
     single { NetworkUtils() }
