@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">FiveDayForecaster</string>
+    <string name="five_day_forecast">Five Day Forecast</string>
+    <string name="clear">Clear</string>
+    <string name="submit">Submit</string>
+    <string name="enter_zip_code">Enter Zip Code to get Weather Forecast</string>
+    <string name="zip_code">Zip Code</string>
+
+    <string name="forecast">Forecast: %1$s</string>
+    <string name="temperature">Temperature: %1$d°F</string>
+    <string name="humidity">Humidity: %1$d%%</string>
+    <string name="cloud_cover">Cloud Cover: %1$d%%</string>
+    <string name="wind_speed">Wind Speed: %1$d mph</string>
+    <string name="visibility">Visibility: %1$d meters</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/weather_dark">
+
+    <ImageView
+        android:id="@+id/weatherIcon"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="@dimen/extra_large_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/extra_large_padding"
+        android:layout_marginEnd="@dimen/extra_large_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Partly Cloudy" />
+
+    <TextView
+        android:id="@+id/dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="32dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherIcon"
+        tools:text="Thursday, August 1, 2024 12:20 AM MDT" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginEnd="@dimen/extra_large_padding"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/dateTime"/>
+
+    <TextView
+        android:id="@+id/temperatureText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="@dimen/extra_large_padding"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:text="TEMPERATURE: 25°C" />
+
+    <TextView
+        android:id="@+id/humidityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temperatureText"
+        tools:text="HUMIDITY: 65%" />
+
+    <TextView
+        android:id="@+id/cloudCoverText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/humidityText"
+        tools:text="CLOUD COVER: 75%" />
+
+    <TextView
+        android:id="@+id/windSpeedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cloudCoverText"
+        tools:text="WIND SPEED: 10 mph" />
+
+    <TextView
+        android:id="@+id/visibilityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/windSpeedText"
+        tools:text="VISIBILITY: 10,000 meters" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

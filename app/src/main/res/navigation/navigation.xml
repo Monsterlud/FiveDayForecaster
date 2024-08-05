@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/weatherLocationFragment">
+
+    <fragment
+        android:id="@+id/weatherLocationFragment"
+        android:name="com.monsalud.fivedayforecaster.presentation.WeatherLocationFragment"
+        android:label="fragment_weather_location"
+        tools:layout="@layout/fragment_weather_location" >
+        <action
+            android:id="@+id/action_weatherLocationFragment_to_weatherListFragment"
+            app:destination="@id/weatherListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherListFragment"
+        android:name="com.monsalud.fivedayforecaster.presentation.WeatherListFragment"
+        android:label="WeatherListFragment"
+        tools:layout="@layout/fragment_list_weather">
+
+        <argument
+            android:name="zipCode"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_weatherListFragment_to_weatherDetailFragment"
+            app:destination="@id/weatherDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherDetailFragment"
+        android:name="com.monsalud.fivedayforecaster.presentation.WeatherDetailFragment"
+        android:label="WeatherDetailFragment"
+        tools:layout="@layout/fragment_weather_detail">
+
+        <argument
+            android:name="weatherEntity"
+            app:argType="com.monsalud.fivedayforecaster.data.datasource.local.WeatherEntity" />
+    </fragment>
+
+
+</navigation>

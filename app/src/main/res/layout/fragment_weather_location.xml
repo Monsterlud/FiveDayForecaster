@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/weather_super_light">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FiveDayForecaster"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/playwriteitmodernavariablefont_wght"
+        android:textSize="32sp"
+        android:gravity="center"
+        android:textColor="@color/weather_dark"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txt_enter_zip_code"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginStart="@dimen/large_padding"
+        android:layout_marginEnd="@dimen/large_padding"
+        android:text="@string/enter_zip_code"
+        android:textSize="20dp"
+        android:fontFamily="@font/playfairdisplayvariablefont_wght"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/text_dark"
+        android:textStyle="normal" />
+
+    <EditText
+        android:id="@+id/et_zip_code"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/medium_padding"
+        android:layout_marginStart="@dimen/large_padding"
+        android:layout_marginEnd="@dimen/large_padding"
+        android:layout_height="@dimen/button_height"
+        android:hint="@string/zip_code"
+        app:layout_constraintTop_toBottomOf="@+id/txt_enter_zip_code"
+        android:textSize="24sp"
+        android:inputType="number"/>
+
+    <LinearLayout
+        android:id="@+id/zipCodeEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_padding"
+        android:layout_marginEnd="@dimen/medium_padding"
+        app:layout_constraintTop_toBottomOf="@id/et_zip_code"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/zipCode_submit_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/medium_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
+            android:text="@string/submit"
+            android:gravity="center"
+            android:backgroundTint="@color/weather_dark"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/recycler_clear_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/medium_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
+            android:text="@string/clear"
+            android:gravity="center"
+            android:backgroundTint="@color/weather_dark"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_use_location"
+        android:layout_width="match_parent"
+        android:text="Get a forecast using your location"
+        app:layout_constraintTop_toBottomOf="@+id/zipCodeEntry"
+        android:layout_height="28dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginStart="@dimen/large_padding"
+        android:layout_marginEnd="@dimen/large_padding"
+        android:fontFamily="@font/playfairdisplayvariablefont_wght"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="@color/text_dark"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/txt_requires_permission"
+        android:layout_width="match_parent"
+        android:text="(requires location permissions)"
+        app:layout_constraintTop_toBottomOf="@+id/txt_use_location"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/large_padding"
+        android:layout_marginEnd="@dimen/large_padding"
+        android:fontFamily="@font/playfairdisplayvariablefont_wght"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:textColor="@color/text_dark"
+        android:textStyle="normal" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_use_location"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/extra_large_padding"
+        android:layout_marginEnd="@dimen/extra_large_padding"
+        android:layout_marginTop="8sp"
+        android:text="Use Location"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/txt_requires_permission"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/weather_dark"
+        android:textColor="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
