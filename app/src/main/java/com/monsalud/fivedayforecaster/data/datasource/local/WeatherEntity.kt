@@ -33,3 +33,18 @@ data class WeatherEntity(
 data class FiveDayWeatherResult(
     var list: List<WeatherEntity>
 )
+
+@Entity(tableName = "location_table")
+data class LocationEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int = 1,
+    @ColumnInfo(name = "location")
+    var location: String = "",
+)
+
+sealed class LocationState {
+    object Loading : LocationState()
+    data class Loaded(val location: String) : LocationState()
+    object Error : LocationState()
+}

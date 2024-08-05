@@ -6,6 +6,7 @@ import com.monsalud.fivedayforecaster.data.datasource.local.room.WeatherDAO
 import com.monsalud.fivedayforecaster.data.utils.WeatherMappers
 import com.monsalud.fivedayforecaster.data.datasource.remote.FiveDayWeatherResponseFromApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class LocalDataSourceImpl(
     private val weatherDAO: WeatherDAO,
@@ -29,4 +30,11 @@ class LocalDataSourceImpl(
     override fun getWeatherForecast(): Flow<List<WeatherEntity>> {
         return weatherDAO.getWeatherResponseFromRoom()
     }
+
+    override suspend fun saveLocation(location: String) {
+        weatherDAO.saveLocation(LocationEntity(location = location))
+    }
+
+    override fun getLocation(): Flow<String> =
+        weatherDAO.getLocation().map { it?.location ?: "" }
 }

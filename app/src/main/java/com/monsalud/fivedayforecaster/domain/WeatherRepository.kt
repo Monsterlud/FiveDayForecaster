@@ -14,4 +14,6 @@ interface WeatherRepository {
     suspend fun getGeocodingResponseJson(zipCode: String) : Result<String?>
 
     suspend fun getWeatherResponseJson(lat: Double, lon: Double): Result<String?>
+
+    fun retrieveLocation() : Flow<String>
 }

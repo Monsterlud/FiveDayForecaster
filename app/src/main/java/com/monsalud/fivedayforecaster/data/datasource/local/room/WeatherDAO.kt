@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.monsalud.fivedayforecaster.data.datasource.local.LocationEntity
 import com.monsalud.fivedayforecaster.data.datasource.local.WeatherEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,10 @@ interface WeatherDAO {
 
     @Query("DELETE FROM weather_table")
     suspend fun clearDatabase()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveLocation(location: LocationEntity)
+
+    @Query("SELECT * FROM location_table WHERE id = 1")
+    fun getLocation(): Flow<LocationEntity?>
 }

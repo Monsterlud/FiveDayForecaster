@@ -8,4 +8,8 @@ interface LocalDataSource {
     suspend fun saveWeatherForecast(value: String?)
 
     fun getWeatherForecast(): Flow<List<WeatherEntity>>
+
+    suspend fun saveLocation(location: String)
+
+    fun getLocation(): Flow<String>
 }

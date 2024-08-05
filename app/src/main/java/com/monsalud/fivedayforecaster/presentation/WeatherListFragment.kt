@@ -1,6 +1,7 @@
 package com.monsalud.fivedayforecaster.presentation
 
 import android.content.Context
+import android.location.Location
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
@@ -19,12 +20,16 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.monsalud.fivedayforecaster.R
 import com.monsalud.fivedayforecaster.data.datasource.local.FiveDayWeatherResult
+import com.monsalud.fivedayforecaster.data.datasource.local.LocationState
 import com.monsalud.fivedayforecaster.data.datasource.local.WeatherEntity
+import com.monsalud.fivedayforecaster.data.utils.NetworkUtils
 import com.monsalud.fivedayforecaster.databinding.FragmentListWeatherBinding
 import com.monsalud.fivedayforecaster.presentation.utils.NavigationCommand
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
@@ -32,6 +37,7 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
     private lateinit var binding: FragmentListWeatherBinding
 
     private val viewModel by viewModel<WeatherViewModel>()
+    private val networkUtils by inject<NetworkUtils>()
     private val weatherListAdapter = WeatherListAdapter(FiveDayWeatherResult(emptyList()))
 
     private lateinit var networkUnavailableDialog: AlertDialog.Builder
@@ -47,23 +53,33 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("WeatherListFragment", "onCreateView called")
         val connectivityManager =
             activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         networkUnavailableDialog = AlertDialog.Builder(requireContext())
             .setTitle("Network Error")
-            .setMessage("There was an error getting network connectivity")
+            .setMessage("Network is not available. Last known forecast will be displayed.")
             .setIcon(R.drawable.error)
             .setPositiveButton("Ok") { dialog, _ ->
                 dialog.dismiss()
             }
 
         // Inflate the layout for this fragment
-        binding = FragmentListWeatherBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+        binding = FragmentListWeatherBinding.inflate(inflater, container, false)
+        updateLocationDisplay(LocationState.Loading)
+
+        // Start observing locationState immediately
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("WeatherListFragment", "Starting to collect locationState")
+                viewModel.locationState.collect { state ->
+                    Log.d("WeatherListFragment", "Collected location state: $state")
+                    updateLocationDisplay(state)
+                }
+            }
+        }
 
         binding.btnNewForecast.setOnClickListener {
             clearRecyclerView()
@@ -74,26 +90,25 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         val zipCode = args.zipCode
 
         viewLifecycleOwner.lifecycleScope.launch {
-            binding.rvWeatherList.isVisible = false
-            binding.progressBar.isVisible = true
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                withContext(Dispatchers.IO) {
-                    viewModel.saveFiveDayWeatherForecast(
-                        zipCode, connectivityManager
-                    )
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("WeatherListFragment", "Starting to fetch forecast")
+                binding.rvWeatherList.isVisible = false
+                binding.progressBar.isVisible = true
 
-                    viewModel.weatherForecast.collect { fiveDayWeatherResult ->
-                        withContext(Dispatchers.Main) {
-                            binding.locationDisplay.setTextColor(resources.getColor(R.color.weather_dark))
-                            weatherListAdapter.updateData(fiveDayWeatherResult)
-                            binding.progressBar.isVisible = false
-                            binding.rvWeatherList.isVisible = true
-                            binding.locationDisplay.text =
-                                "Weather forecast for ${viewModel.location}"
-                        }
-                    }
+                viewModel.saveFiveDayWeatherForecast(zipCode, connectivityManager)
+
+                viewModel.weatherForecast.collect { fiveDayWeatherResult ->
+                    Log.d("WeatherListFragment", "Received weather forecast, updating UI")
+                    binding.locationDisplay.setTextColor(resources.getColor(R.color.weather_dark))
+                    weatherListAdapter.updateData(fiveDayWeatherResult)
+                    binding.progressBar.isVisible = false
+                    binding.rvWeatherList.isVisible = true
                 }
             }
+        }
+
+        if (!networkUtils.hasInternetConnection(connectivityManager)) {
+            networkUnavailableDialog.show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -140,5 +155,18 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
         binding.locationDisplay.text = ""
         binding.rvWeatherList.adapter = WeatherListAdapter(FiveDayWeatherResult(emptyList()))
         (binding.rvWeatherList.adapter as WeatherListAdapter).notifyDataSetChanged()
+    }
+
+    private fun updateLocationDisplay(state: LocationState) {
+        val displayText = when (state) {
+            is LocationState.Loading -> "Loading location..."
+            is LocationState.Loaded -> "Forecast for ${state.location}"
+            is LocationState.Error -> "Unable to load location"
+        }
+        Log.d("WeatherListFragment", "Updating location display to: $displayText")
+        binding.locationDisplay.post {
+            binding.locationDisplay.text = displayText
+            Log.d("WeatherListFragment", "Location display text set to: ${binding.locationDisplay.text}")
+        }
     }
 }
