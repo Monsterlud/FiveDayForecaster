@@ -67,6 +67,7 @@ network issue.
 
 Here I will explain where each item in the Rubric is implemented.
 
+
 #### Android UI/UX
 
 _"Build a navigable interface consisting of multiple screens of functionality and data"_
@@ -92,6 +93,7 @@ a drawables directory which contains launcher icons as well as miscellaneous ima
 throughout the app.
 - All Views in my layout files contain id fields and at least one vertical constraint.
 - Data retrieved from the API is loaded using the ViewHolder pattern and a RecyclerView.
+
 
 #### Local & Network Data
 
@@ -122,6 +124,7 @@ The UI collects changes to this database via Kotlin Flows.
 functions in LocalDataSource, WeatherRepository, etc).
 - All data is structured with appropriate data types and scope (see WeatherEntity)
 
+
 #### Android System & Hardware Integration
 
 _"Architect applicatoin functionality using MVVM"_
@@ -137,7 +140,7 @@ _"implement logic to handle and respond to hardware and system events that impac
 Lifecycle"_
 
 - The app uses the hardware's location capabilities and requests location permissions when needed
-  (specifically when clicking the 'Use Device Location' button.
+  (specifically when clicking the 'Use Device Location' button).
 - LifeCycle events are handled gracefully (e.g. when switching orientations - see WeatherViewModel)
 
 _"utilize system hardware to provide the user with advanced functionality and features"_
