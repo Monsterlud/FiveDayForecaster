@@ -44,14 +44,25 @@ class WeatherListAdapter(
         val ldtFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val formattedDate = dateTime.format(ldtFormatter)
 
-        val kToF = ((1.8 * (fiveDayWeatherResult.list[position].temp-273)) + 32).toInt()
+        val today = LocalDateTime.now()
+        val tomorrow = today.plusDays(1).withHour(0).withMinute(0).withSecond(0)
+        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+        val formattedTime = dateTime.toLocalTime().format(timeFormatter)
+
+        val kToF = ((1.8 * (fiveDayWeatherResult.list[position].temp - 273)) + 32).toInt()
         val temp = "Temperature: $kToF F"
 
         val humidity = "Humidity: ${fiveDayWeatherResult.list[position].humidity}%"
 
         val weatherDescription = "Forecast: ${fiveDayWeatherResult.list[position].description}"
 
-        holder.binding.dayTime.text = formattedDate.toString()
+        holder.binding.dayTime.text = if (dateTime.toLocalDate() == today.toLocalDate()) {
+            "Today $formattedTime"
+        } else if (dateTime.toLocalDate() == tomorrow.toLocalDate()) {
+            "Tomorrow $formattedTime"
+        } else {
+            formattedDate.toString()
+        }
         holder.binding.temperature.text = temp
         holder.binding.humidity.text = humidity
         holder.binding.weatherDescription.text = weatherDescription
