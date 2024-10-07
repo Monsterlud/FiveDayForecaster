@@ -16,7 +16,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        card_view:cardBackgroundColor="@color/weather_light"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="5dp">
 
@@ -38,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
                     tools:text="Today's Date" />
             </LinearLayout>
 
@@ -47,7 +45,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:textColor="@color/weather_white"
                 tools:text="70F" />
 
             <TextView
@@ -55,7 +52,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:textColor="@color/weather_white"
                 tools:text="93%" />
 
             <TextView
@@ -63,7 +59,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:textColor="@color/weather_white"
                 tools:text="Sunny" />
         </LinearLayout>
 

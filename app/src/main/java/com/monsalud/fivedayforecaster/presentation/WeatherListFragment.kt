@@ -170,7 +170,6 @@ class WeatherListFragment : Fragment(), WeatherListAdapter.OnItemClickListener {
 
 
     private fun updateWeatherDisplay(fiveDayWeatherResult: FiveDayWeatherResult) {
-        binding.locationDisplay.setTextColor(resources.getColor(R.color.weather_dark))
         weatherListAdapter.updateData(fiveDayWeatherResult)
         binding.progressBar.isVisible = false
         binding.rvWeatherList.isVisible = true

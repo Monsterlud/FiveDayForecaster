@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/weather_super_light">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +12,6 @@
         android:fontFamily="@font/playwriteitmodernavariablefont_wght"
         android:gravity="center"
         android:text="FiveDayForecaster"
-        android:textColor="@color/weather_dark"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +28,6 @@
         android:fontFamily="@font/playfairdisplayvariablefont_wght"
         android:gravity="center"
         android:text="@string/enter_zip_code"
-        android:textColor="@color/text_dark"
         android:textSize="20dp"
         android:textStyle="normal"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,10 +51,8 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginStart="30dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/weather_dark"
         android:gravity="center"
         android:text="@string/submit"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/recycler_clear_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,10 +65,8 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/weather_dark"
         android:gravity="center"
         android:text="@string/clear"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/zipCode_submit_button"
@@ -90,7 +83,6 @@
         android:fontFamily="@font/playfairdisplayvariablefont_wght"
         android:gravity="center"
         android:text="Get a forecast using your location"
-        android:textColor="@color/text_dark"
         android:textSize="20dp"
         android:textStyle="normal"
         app:layout_constraintTop_toBottomOf="@+id/zipCode_submit_button" />
@@ -104,7 +96,6 @@
         android:fontFamily="@font/playfairdisplayvariablefont_wght"
         android:gravity="center"
         android:text="(requires location permissions)"
-        android:textColor="@color/text_dark"
         android:textSize="18dp"
         android:textStyle="normal"
         app:layout_constraintTop_toBottomOf="@+id/txt_use_location" />
@@ -117,10 +108,8 @@
         android:layout_marginTop="8sp"
         android:layout_marginEnd="@dimen/extra_large_padding"
         android:layout_weight="1"
-        android:backgroundTint="@color/weather_dark"
         android:gravity="center"
         android:text="Use Device Location"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_requires_permission" />
